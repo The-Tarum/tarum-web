@@ -1,0 +1,64 @@
+name: Deploy Production
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read # Add permission for actions API access
+
+jobs:
+  Deploy:
+    name: Deploying Tarum-Production
+    if: github.event.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: Production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      # - name: Install Dependencies
+      #   run: npm ci # Ensure dependencies are installed
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: "1.9.8" # Set the version you prefer
+
+      #      - name: Export AWS Credentials
+      #        run: |
+      #          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+      #          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+      #          echo "AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}" >> $GITHUB_ENV
+
+      - name: Export AWS Credentials
+        run: |
+          echo "AWS_ACCESS_KEY_ID=AKIA6G75DYBAJHQKUSRZ" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=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" >> $GITHUB_ENV
+          echo "AWS_DEFAULT_REGION=us-east-1" >> $GITHUB_ENV
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Workspace Selection
+        run: terraform workspace select -or-create prod
+
+      # - name: Check if state is locked
+      #   run: |
+      #     terraform force-unlock -force a1c77c7d-da99-c254-2dd7-bcd87d09cd7b
+
+      - name: Terraform Plan
+        run: terraform plan -lock=false -var-file="prod.tfvars" -out=tfplan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
