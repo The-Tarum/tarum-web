@@ -1,11 +1,17 @@
 import React from 'react';
 
-function Footer() {
+const Footer = () => {
   return (
-    <footer className="bg-blue-500 text-white p-4 mt-8">
-      <p className="text-center">© 2025 Tarum Web. All rights reserved.</p>
+    <footer className="bg-gray-800 text-white py-6 mt-8">
+      <div className="max-w-7xl mx-auto px-6 text-center">
+        <p>&copy; 2025 MyApp. All rights reserved.</p>
+        <div className="space-x-4 mt-4">
+          <a href="#" className="hover:text-indigo-400">Privacy Policy</a>
+          <a href="#" className="hover:text-indigo-400">Terms of Service</a>
+        </div>
+      </div>
     </footer>
   );
-}
+};
 
 export default Footer;

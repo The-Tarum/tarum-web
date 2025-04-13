@@ -1,12 +1,15 @@
 import React from 'react';
 
-function HomePage() {
+const HomePage = () => {
   return (
-    <div className="p-8">
-      <h1 className="text-4xl font-bold">Welcome to the Home Page</h1>
-      <p className="mt-4">This is the homepage of the Tarum Web app.</p>
+    <div className="bg-gradient-to-r from-blue-500 to-indigo-600 min-h-screen flex flex-col justify-center items-center text-white py-16">
+      <h1 className="text-5xl font-bold text-center mb-4">Welcome to MyApp!</h1>
+      <p className="text-lg text-center mb-8">Your one-stop solution for all your needs. Start exploring now!</p>
+      <button className="bg-blue-700 hover:bg-blue-800 text-lg font-semibold py-3 px-6 rounded-full shadow-lg transition duration-300">
+        Get Started
+      </button>
     </div>
   );
-}
+};
 
 export default HomePage;
