@@ -7,7 +7,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // ✅ React Router hook
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,12 +17,7 @@ const LoginPage = () => {
 
     try {
       const result = await login(loginDto);
-      console.log('Login success:', result);
-
-      // Save token to localStorage
       localStorage.setItem('token', result.idToken);
-
-      // Redirect to Home page
       navigate('/home');
     } catch (err) {
       setError(err.response?.data?.error?.message || 'Login failed');
@@ -30,54 +25,56 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-600">
-      <form className="bg-white p-8 rounded-lg shadow-xl w-96 space-y-6" onSubmit={handleLogin}>
-        <h2 className="text-3xl font-bold text-center text-gray-800">Welcome Back!</h2>
-        <p className="text-center text-gray-600">Please log in to your account</p>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-md p-8">
+        <h2 className="text-2xl font-semibold text-gray-800 text-center mb-2">Sign in to Your Account</h2>
+        <p className="text-sm text-gray-500 text-center mb-6">Access your dashboard and start shopping</p>
 
-        <div>
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full p-4 border border-gray-300 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 transition duration-200"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+        <form onSubmit={handleLogin} className="space-y-5">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input
+              type="email"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-        <div>
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full p-4 border border-gray-300 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 transition duration-200"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input
+              type="password"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
-        <button
-          type="submit"
-          className="w-full py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition duration-300"
-        >
-          Log In
-        </button>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white font-medium py-3 rounded-lg hover:bg-blue-700 transition duration-300"
+          >
+            Log In
+          </button>
 
-        <div className="text-center">
-  <p className="text-sm text-gray-600">
-    Don't have an account? 
-    <span
-      className="text-blue-500 cursor-pointer ml-1"
-      onClick={() => navigate('/signup')}
-    >
-      Sign Up
-    </span>
-  </p>
-</div>
-      </form>
+          <p className="text-sm text-center text-gray-600">
+            Don&apos;t have an account?{' '}
+            <span
+              className="text-blue-500 hover:underline cursor-pointer"
+              onClick={() => navigate('/signup')}
+            >
+              Sign Up
+            </span>
+          </p>
+        </form>
+      </div>
     </div>
   );
 };

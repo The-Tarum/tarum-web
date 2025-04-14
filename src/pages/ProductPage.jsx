@@ -5,50 +5,41 @@ import { fetchCategories, fetchSubcategories } from '../api/categoryApi';
 import ProductCard from '../components/ProductCard';
 
 const ProductPage = () => {
-  // Get route params (if any) as initial values
   const { categoryId: routeCategoryId, subCategoryId: routeSubCategoryId } = useParams();
   const navigate = useNavigate();
 
-  // Filter states
   const [categoryFilter, setCategoryFilter] = useState(routeCategoryId || '');
   const [subcategoryFilter, setSubcategoryFilter] = useState(routeSubCategoryId || '');
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [minRating, setMinRating] = useState(0);
 
-  // Data states for products & filters
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [availableSubcategories, setAvailableSubcategories] = useState([]);
 
-  // Fetch all categories for the dropdown list
+  const [showFilters, setShowFilters] = useState(false); // for mobile toggle
+
   useEffect(() => {
     const loadCategories = async () => {
       const data = await fetchCategories();
-      if (data.success) {
-        setCategories(data.data || []);
-      }
+      if (data.success) setCategories(data.data || []);
     };
     loadCategories();
   }, []);
 
-  // Fetch subcategories when a category is selected
   useEffect(() => {
     if (categoryFilter) {
       const loadSubcategories = async () => {
         const data = await fetchSubcategories(categoryFilter);
-        if (data.success) {
-          setAvailableSubcategories(data.data || []);
-        }
+        if (data.success) setAvailableSubcategories(data.data || []);
       };
       loadSubcategories();
     } else {
-      // Clear subcategories if no category is selected
       setAvailableSubcategories([]);
       setSubcategoryFilter('');
     }
   }, [categoryFilter]);
 
-  // Fetch products based on filter criteria
   useEffect(() => {
     const loadProducts = async () => {
       const filters = {
@@ -58,28 +49,33 @@ const ProductPage = () => {
         rating: minRating,
       };
       const data = await fetchProducts(filters);
-      if (data.success) {
-        setProducts(data.data || []);
-      }
+      if (data.success) setProducts(data.data || []);
     };
     loadProducts();
   }, [categoryFilter, subcategoryFilter, priceRange, minRating]);
 
-  // When a filter changes, also optionally update the route (so it can be bookmarkable)
-  useEffect(() => {
-    // You can update the URL query parameters if desired.
-    // For example:
-    // navigate(`/products/${categoryFilter}/${subcategoryFilter}`);
-  }, [categoryFilter, subcategoryFilter, navigate]);
-
   return (
-    <div className="flex">
-      {/* Sidebar Filters */}
-      <div className="w-64 p-6 border-r bg-white">
-        <h2 className="text-xl font-bold mb-6">Filters</h2>
+    <div className="flex flex-col lg:flex-row">
+      {/* Mobile Filter Toggle */}
+      <div className="lg:hidden p-4 bg-white border-b flex justify-between items-center">
+        <h2 className="text-xl font-bold">Explore Products</h2>
+        <button
+          className="text-indigo-600 font-medium border border-indigo-600 px-3 py-1 rounded"
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          {showFilters ? 'Hide Filters' : 'Show Filters'}
+        </button>
+      </div>
 
-        {/* Category Dropdown */}
-        <div className="mb-6">
+      {/* Sidebar Filters */}
+      <div
+        className={`w-full lg:w-64 p-4 lg:p-6 border-r bg-white z-10 ${
+          showFilters ? 'block' : 'hidden'
+        } lg:block`}
+      >
+        <h2 className="text-xl font-bold mb-4 lg:mb-6">Filters</h2>
+
+        <div className="mb-4 lg:mb-6">
           <label className="block text-sm font-medium mb-1">Category</label>
           <select
             value={categoryFilter}
@@ -95,8 +91,7 @@ const ProductPage = () => {
           </select>
         </div>
 
-        {/* Subcategory Dropdown */}
-        <div className="mb-6">
+        <div className="mb-4 lg:mb-6">
           <label className="block text-sm font-medium mb-1">Subcategory</label>
           <select
             value={subcategoryFilter}
@@ -113,8 +108,7 @@ const ProductPage = () => {
           </select>
         </div>
 
-        {/* Price Range Filter */}
-        <div className="mb-6">
+        <div className="mb-4 lg:mb-6">
           <label className="block text-sm font-medium mb-1">Price Range</label>
           <input
             type="range"
@@ -127,8 +121,7 @@ const ProductPage = () => {
           <p className="text-xs text-gray-600">Up to ${priceRange[1]}</p>
         </div>
 
-        {/* Minimum Rating Filter */}
-        <div className="mb-6">
+        <div className="mb-4 lg:mb-6">
           <label className="block text-sm font-medium mb-1">Minimum Rating</label>
           <select
             value={minRating}
@@ -142,20 +135,16 @@ const ProductPage = () => {
             <option value="4">4★ & above</option>
           </select>
         </div>
-
-        {/* You can add more filters (e.g., Delivery Type, Payment Options) here */}
       </div>
 
       {/* Product Grid */}
-      <div className="flex-1 p-6 bg-gray-50 min-h-screen">
-        <h1 className="text-3xl font-bold mb-6 text-gray-800">Explore Products</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="flex-1 p-4 lg:p-6 bg-gray-50 min-h-screen">
+        <h1 className="text-2xl lg:text-3xl font-bold mb-4 lg:mb-6 text-gray-800">Explore Products</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {products.length === 0 ? (
             <p className="col-span-full text-center text-gray-500">No products found matching your filters.</p>
           ) : (
-            products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))
+            products.map((product) => <ProductCard key={product.id} product={product} />)
           )}
         </div>
       </div>
