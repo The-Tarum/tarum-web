@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { fetchCategories, fetchSubcategories } from '../api/categoryApi';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { fetchCategories, fetchSubcategories } from '../api/categoryApi';
 
 const CategoryPage = () => {
   const [categories, setCategories] = useState([]);
@@ -9,68 +9,90 @@ const CategoryPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchCategories().then(setCategories);
+    const fetchData = async () => {
+      const cats = await fetchCategories();
+      setCategories(cats);
+      if (cats.length > 0) {
+        setSelectedCategoryId(cats[0]._id);
+      }
+    };
+    fetchData();
   }, []);
 
-  const handleCategoryClick = (categoryId) => {
-    setSelectedCategoryId(categoryId);
-    fetchSubcategories(categoryId).then(setSubcategories);
-  };
+  useEffect(() => {
+    console.log('Selected category ID changed:', selectedCategoryId);
+    if (selectedCategoryId) {
+      const fetchSubs = async () => {
+        console.log('Calling fetchSubcategories with:', selectedCategoryId);
+        const subs = await fetchSubcategories(selectedCategoryId);
+        console.log('Subcategories fetched:', subs);
+        setSubcategories(subs);
+      };
+      fetchSubs();
+    }
+  }, [selectedCategoryId]);
 
-  const handleSubcategoryClick = (subCategoryId) => {
-    navigate(`/products/${selectedCategoryId}/${subCategoryId}`);
+  // 👇 Fix to force trigger fetch even on same ID click
+  const handleCategoryClick = (id) => {
+    if (id === selectedCategoryId) {
+      setSelectedCategoryId(null);
+      setTimeout(() => setSelectedCategoryId(id), 0);
+    } else {
+      setSelectedCategoryId(id);
+    }
   };
 
   return (
-    <div className="p-4 sm:p-6 bg-gray-100 min-h-screen">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white px-6 py-12 sm:p-16 rounded-lg shadow-lg mb-10 sm:mb-12 text-center">
-        <h1 className="text-3xl sm:text-5xl font-extrabold mb-3 sm:mb-4">Explore Our Categories</h1>
-        <p className="text-md sm:text-xl">Find what you're looking for from a variety of categories and subcategories</p>
-      </div>
-
-      {/* Categories Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 mb-10 sm:mb-12">
-        {categories.map((cat) => (
-          <div
-            key={cat.id}
-            onClick={() => handleCategoryClick(cat.id)}
-            className="cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-lg rounded-lg bg-white p-4 sm:p-6 text-center border border-gray-300 hover:border-indigo-500"
-          >
-            <img
-              src={cat.image}
-              alt={cat.name}
-              className="h-28 w-28 sm:h-36 sm:w-36 mx-auto object-cover rounded-lg mb-4 sm:mb-6 transition-transform duration-300 hover:scale-110"
-            />
-            <p className="text-md sm:text-lg font-semibold text-gray-800">{cat.name}</p>
-          </div>
-        ))}
+    <div className="flex h-screen bg-gray-50">
+      {/* Sidebar */}
+      <div className="w-28 bg-white shadow-md overflow-y-auto border-r border-gray-200">
+        <ul className="flex flex-col items-center space-y-4 py-6">
+          {categories.map((cat) => (
+            <li
+              key={cat._id}
+              onClick={() => handleCategoryClick(cat.id)}
+              className={`flex flex-col items-center justify-center cursor-pointer px-3 py-2 rounded-xl transition-all duration-200 ${
+                cat._id === selectedCategoryId
+                  ? 'bg-blue-100 text-blue-700 font-semibold shadow'
+                  : 'text-gray-500 hover:bg-gray-100'
+              }`}
+            >
+              <img
+                src={cat.image || 'https://via.placeholder.com/40'}
+                alt={cat.name}
+                className="w-8 h-8 object-contain mb-1"
+              />
+              <div className="text-[10px] text-center truncate">{cat.name}</div>
+            </li>
+          ))}
+        </ul>
       </div>
 
       {/* Subcategories */}
-      {selectedCategoryId && (
-        <>
-          <h2 className="text-2xl sm:text-3xl font-semibold mb-5 sm:mb-6 text-gray-800 text-center sm:text-left">
-            Subcategories
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
-            {subcategories.map((sub) => (
-              <div
-                key={sub.id}
-                onClick={() => handleSubcategoryClick(sub.id)}
-                className="cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-lg rounded-lg bg-white p-4 sm:p-6 text-center border border-gray-200 hover:border-indigo-500"
-              >
-                <img
-                  src={sub.image}
-                  alt={sub.name}
-                  className="h-24 w-24 sm:h-32 sm:w-32 mx-auto object-cover rounded-lg mb-3 sm:mb-4 transition-transform duration-300 hover:scale-110"
-                />
-                <p className="text-md sm:text-lg font-medium text-gray-700">{sub.name}</p>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
+      <div className="flex-1 p-6 overflow-y-auto">
+        <h2 className="text-xl font-bold text-gray-800 mb-5 border-b pb-2">
+          {categories.find((c) => c.id === selectedCategoryId)?.name || 'Subcategories'}
+        </h2>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          {subcategories.map((sub) => (
+            <div
+              key={sub._id}
+              className="flex flex-col items-center p-4 bg-white rounded-xl shadow-sm border hover:shadow-md cursor-pointer transition-all"
+              onClick={() => navigate(`/products?subCategoryId=${sub.id}`)}
+            >
+              <img
+                src={sub.image || 'https://via.placeholder.com/64'}
+                alt={sub.name}
+                className="w-16 h-16 object-contain mb-2"
+              />
+              <span className="text-[10px] text-center text-gray-700 font-medium truncate">
+                {sub.name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

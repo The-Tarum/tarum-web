@@ -6,6 +6,8 @@ import Layout from './components/Layout';
 import PrivateRoute from './PrivateRoute'
 import CategoryPage from './pages/CategoryPage'
 import ProductPage from './pages/ProductPage'
+import ProfilePage  from './pages/ProfilePage'
+import OrdersPage from './pages/OrdersPage';
 
 const routes = createBrowserRouter([
     {
@@ -27,6 +29,14 @@ const routes = createBrowserRouter([
             {
               path: 'home',
               element: <HomePage />,
+            },
+            {
+              path: 'orders',
+              element: <OrdersPage />,
+            },
+            {
+              path: 'profile',
+              element: <ProfilePage />,
             },
             {
               path: 'categories',
