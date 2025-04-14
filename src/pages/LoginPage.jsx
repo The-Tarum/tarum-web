@@ -67,10 +67,16 @@ const LoginPage = () => {
         </button>
 
         <div className="text-center">
-          <p className="text-sm text-gray-600">Don't have an account? 
-            <span className="text-blue-500 cursor-pointer"> Sign Up</span>
-          </p>
-        </div>
+  <p className="text-sm text-gray-600">
+    Don't have an account? 
+    <span
+      className="text-blue-500 cursor-pointer ml-1"
+      onClick={() => navigate('/signup')}
+    >
+      Sign Up
+    </span>
+  </p>
+</div>
       </form>
     </div>
   );
