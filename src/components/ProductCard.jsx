@@ -1,11 +1,12 @@
 import React from 'react';
 
 const ProductCard = ({ product }) => {
-  const imageUrl = product?.images?.[0]?.url || '/placeholder.png';
+  const imageUrl = product?.ProductImages?.[0]?.imageUrl || '/placeholder.png';
 
-  const priceDisplay = product.price?.priceType === 'NUMBER'
-    ? `$${product.price.price}`
-    : `$${product.price.lowPrice} - $${product.price.highPrice}`;
+  const priceData = product?.ProductPrice || {};
+  const priceDisplay = priceData.price
+    ? `$${priceData.price}`
+    : `$${priceData.lowPrice || 0} - $${priceData.highPrice || 0}`;
 
   return (
     <div className="bg-white rounded-lg shadow hover:shadow-md transition p-4">

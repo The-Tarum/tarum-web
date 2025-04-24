@@ -49,9 +49,12 @@ const ProductPage = () => {
         price: priceRange[1],
         rating: minRating,
       };
+  
       const data = await fetchProducts(filters);
-      if (data.success) setProducts(data.data || []);
+      console.log("Raw data:", data);
+      setProducts(data);
     };
+  
     loadProducts();
   }, [categoryFilter, subcategoryFilter, priceRange, minRating]);
 
@@ -147,10 +150,14 @@ const ProductPage = () => {
         {/* Only display heading for desktop */}
         <h1 className="hidden lg:block text-2xl lg:text-3xl font-semibold text-gray-800 mb-6">Explore Products</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.length === 0 ? (
+          
+          {
+          
+          products.length === 0 ? (
             <p className="col-span-full text-center text-gray-500">No products found matching your filters.</p>
           ) : (
-            products.map((product) => <ProductCard key={product.id} product={product} />)
+            
+            products.map((product) => < ProductCard key={product.id} product={product} />)
           )}
         </div>
       </div>
