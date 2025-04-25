@@ -2,6 +2,22 @@ import React, { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search } from 'lucide-react';
 
+
+// Import SVGs as URLs
+import MailIcon from '../assets/mail.svg';
+import BookOpenIcon from '../assets/book-open.svg';
+import StorefrontIcon from '../assets/storefront.svg';
+import UsersIcon from '../assets/users.svg';
+import SettingsIcon from '../assets/settings.svg';
+import Message from '../assets/message.svg';
+// Import SVGs as URLs
+import MailIconFill from '../assets/mail-filled.svg';
+import BookOpenIconFill from '../assets/book-open-filled.svg';
+import StorefrontIconFill from '../assets/storefront-filled.svg';
+import UsersIconFill from '../assets/users-filled.svg';
+import SettingsIconFill from '../assets/settings-filled.svg';
+import MessageFill from '../assets/message-filled.svg';
+
 const Header = () => {
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
@@ -12,8 +28,8 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-indigo-600 text-white shadow-md sticky top-0 z-10">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center md:px-6 border-b border-indigo-500/50">
+    <header className="bg-primary-dark text-white shadow-md sticky top-0 z-10">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center md:px-6 border-b border-primary-dark">
         {/* Logo */}
         <div className="font-bold text-2xl tracking-wide">
           <Link to="/" className="hover:opacity-90 transition">Tarum</Link>
@@ -40,7 +56,7 @@ const Header = () => {
           <Link to="/about" className="hover:text-indigo-300">About</Link>
           <button
             onClick={handleLogout}
-            className="bg-white text-indigo-600 px-4 py-1 rounded-full hover:bg-gray-100 transition"
+            className="bg-white text-primary-light px-4 py-1 rounded-full hover:bg-gray-100 transition"
           >
             Logout
           </button>
@@ -53,32 +69,48 @@ const Header = () => {
 const MobileBottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
   const isActive = (path) => location.pathname === path;
 
   const navItems = [
-    { path: '/home', label: 'Home', icon: '🏠' },
-    { path: '/categories', label: 'Categories', icon: '📂' },
-    { path: '/products', label: 'Products', icon: '🔍' },
-    { path: '/orders', label: 'Orders', icon: '📦' },
-    { path: '/profile', label: 'Profile', icon: '👤' },
+    { path: '/home',       label: 'Email',       icon: MailIcon ,iconFill:MailIconFill},
+    { path: '/products',   label: 'Contacts',    icon: BookOpenIcon ,iconFill:BookOpenIconFill},
+    { path: '/marketplace/home',label: 'Marketplace', icon: StorefrontIcon ,iconFill:StorefrontIconFill},
+    { path: '/chats',      label: 'Chats',       icon: Message ,iconFill:MessageFill},
+    { path: '/groups',     label: 'Groups',      icon: UsersIcon ,iconFill:UsersIconFill},
+    { path: '/settings',   label: 'Settings',    icon: SettingsIcon ,iconFill:SettingsIconFill},
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-sm px-4 py-2 flex justify-around text-sm text-gray-700 md:hidden z-50">
-      {navItems.map(({ path, label, icon }) => (
+    <nav className="fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200 grid grid-cols-6 font-medium">
+      {navItems.map(({ path, label, icon ,iconFill}) => (
         <button
           key={path}
+          type="button"
           onClick={() => navigate(path)}
-          className={`flex flex-col items-center transition ${
-            isActive(path) ? 'text-indigo-600 font-semibold' : 'hover:text-indigo-400'
-          }`}
+          className={
+            `group inline-flex flex-col items-center justify-center transition-colors ${
+              isActive(path) ? '' : 'hover:bg-gray-50'
+            }`
+          }
         >
-          <span className="text-lg">{icon}</span>
-          {label}
+          {/* Icon with mask and gradient or grey fill */}
+          <img src={   isActive(path) ?iconFill :icon}/>
+
+          {/* Label with gradient text when active */}
+          <span
+            className={
+              `text-[11px] leading-[20px] tracking-[0px] text-center font-[Graphik] font-normal transition-colors ${
+                isActive(path)
+                  ? 'bg-clip-text text-transparent bg-gradient-to-r from-[#1F73F7] to-[#F15F60]'
+                  : 'text-[#9DA4AE]'
+              }`
+            }
+          >
+            {label}
+          </span>
         </button>
       ))}
-    </div>
+    </nav>
   );
 };
 

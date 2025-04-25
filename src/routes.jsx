@@ -5,9 +5,18 @@ import SignupPage from './pages/SignupPage';
 import Layout from './components/Layout';
 import PrivateRoute from './PrivateRoute'
 import CategoryPage from './pages/CategoryPage'
-import ProductPage from './pages/ProductPage'
+import ProductPage from './pages/marketplace/ProductPage'
 import ProfilePage  from './pages/ProfilePage'
 import OrdersPage from './pages/OrdersPage';
+import ChatsPage from './pages/ChatsPage';
+import ContectsPage from './pages/ContectsPage';
+import EmailPage from './pages/EmailPage';
+import GroupsPage from './pages/GroupsPage';
+import MarketplacePage from './pages/marketplace/MarketplacePage';
+import SettingsPage from './pages/SettingsPage';
+import  SupplierPage from "./pages/marketplace/SupplierPage";
+import TabView  from './components/TabView';
+
 
 const routes = createBrowserRouter([
     {
@@ -26,30 +35,46 @@ const routes = createBrowserRouter([
           path: '/',
           element: <Layout />, // Layout (Header/Footer)
           children: [
+           
             {
-              path: 'home',
-              element: <HomePage />,
+              path: 'email',
+              element: <EmailPage />,
             },
             {
-              path: 'orders',
-              element: <OrdersPage />,
+              path: 'contents',
+              element: <ContectsPage />,
             },
             {
-              path: 'profile',
-              element: <ProfilePage />,
+              path: 'marketplace',
+              element: <TabView /> , 
+              children: [
+                {
+                  path: 'home',
+                  element: <HomePage />,
+                },
+                {
+                  path: 'products',
+                  element: <ProductPage/>,
+                },
+                {
+                  path: 'supplier',
+                  element: <SupplierPage />,
+                },
+              ]
             },
             {
-              path: 'categories',
-              element: <CategoryPage />,
+              path: 'chats',
+              element: <ChatsPage />,
             },
             {
-              path: 'products',
-              element: <ProductPage />,
+              path: 'groups',
+              element: <GroupsPage />,
             },
             {
-              path: 'products/:categoryId/:subCategoryId',
-              element: <ProductPage />,
+              path: 'settings',
+              element: <SettingsPage />,
             },
+  
             
           ],
         },
@@ -58,3 +83,4 @@ const routes = createBrowserRouter([
   ]);
   
   export default routes;
+

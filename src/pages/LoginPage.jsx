@@ -18,7 +18,7 @@ const LoginPage = () => {
     try {
       const result = await login(loginDto);
       localStorage.setItem('token', result.idToken);
-      navigate('/home');
+      navigate('/marketplace/home');
     } catch (err) {
       setError(err.response?.data?.error?.message || 'Login failed');
     }
@@ -47,7 +47,7 @@ const LoginPage = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <input
               type="password"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:primary-light"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -59,7 +59,7 @@ const LoginPage = () => {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white font-medium py-3 rounded-lg hover:bg-blue-700 transition duration-300"
+            className="w-full bg-primary-light text-white font-medium py-3 rounded-lg hover:bg-blue-700 transition duration-300"
           >
             Log In
           </button>
@@ -67,7 +67,7 @@ const LoginPage = () => {
           <p className="text-sm text-center text-gray-600">
             Don&apos;t have an account?{' '}
             <span
-              className="text-blue-500 hover:underline cursor-pointer"
+              className="text-primary-light hover:underline cursor-pointer"
               onClick={() => navigate('/signup')}
             >
               Sign Up

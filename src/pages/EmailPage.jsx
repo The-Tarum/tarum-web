@@ -1,6 +1,6 @@
 import React from 'react';
 
-const HomePage = () => {
+const EmailPage = () => {
   return (
     <div className="bg-gradient-to-r from-blue-500 to-indigo-600 min-h-screen flex flex-col justify-center items-center text-white py-16">
       <h1 className="text-5xl font-bold text-center mb-4">Welcome to MyApp!</h1>
@@ -15,4 +15,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default EmailPage;
