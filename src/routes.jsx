@@ -44,6 +44,7 @@ const routes = createBrowserRouter([
               path: 'contents',
               element: <ContectsPage />,
             },
+
             {
               path: 'marketplace',
               element: <TabView /> , 
@@ -59,6 +60,10 @@ const routes = createBrowserRouter([
                 {
                   path: 'supplier',
                   element: <SupplierPage />,
+                },
+                {
+                  path: 'categories',
+                  element: <CategoryPage />,
                 },
               ]
             },

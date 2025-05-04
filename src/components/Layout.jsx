@@ -36,7 +36,7 @@ const Header = () => {
         </div>
 
         {/* Search bar - visible on all devices now */}
-        <div className="flex-1 mx-4">
+        {/* <div className="flex-1 mx-4">
           <div className="flex items-center bg-white rounded-full px-3 py-1 shadow-sm text-black">
             <Search className="w-4 h-4 mr-2 text-gray-500" />
             <input
@@ -47,7 +47,7 @@ const Header = () => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Desktop nav only */}
         <nav className="hidden md:flex items-center space-x-6">

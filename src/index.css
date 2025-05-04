@@ -2,9 +2,26 @@
 
 
 @theme {
-    --color-primary-dark: #005399;
+    --color-primary-dark: #00447C;
     --color-primary-light: #1F73F7;
     --color-secondary: #00AD6F;
     --color-tag:#6CB33F;
     --color-pill-selected:#F8D45D;
 }
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
