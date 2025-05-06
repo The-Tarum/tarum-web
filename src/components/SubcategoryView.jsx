@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchSubcategories } from '../api/categoryApi';
+import { fetchSubcategories } from '../services/CategoryService';
 
 
 

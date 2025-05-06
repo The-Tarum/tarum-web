@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchCategories } from '../api/categoryApi';
+import { fetchCategories } from '../services/CategoryService';
 
 const CategoryTab = ({ categories, selectedCategoryId, onCategoryTab }) => {
   return (

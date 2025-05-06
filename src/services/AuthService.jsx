@@ -1,4 +1,4 @@
-import firebaseService from '../services/firebaseService';
+import firebaseService from './FirebaseService';
 import axios from 'axios';
 
 const BASE_URL = import.meta.env.VITE_USER_SERVICE;

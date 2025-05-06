@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">tarum</string>
+    <string name="title_activity_main">tarum</string>
+    <string name="package_name">com.tarum.app</string>
+    <string name="custom_url_scheme">com.tarum.app</string>
+</resources>

@@ -25,3 +25,13 @@
   .animate-pulse {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
+
+  @keyframes slideDown {
+    from { height: 0 }
+    to { height: var(--radix-collapsible-content-height) }
+  }
+  
+  @keyframes slideUp {
+    from { height: var(--radix-collapsible-content-height) }
+    to { height: 0 }
+  }

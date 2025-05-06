@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FiFilter, FiX, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { FaSearch, FaClock } from 'react-icons/fa';
-import { fetchProducts } from '../../services/productService';
-import { fetchCategories, fetchSubcategories } from '../../api/categoryApi';
+import { fetchProducts } from '../../services/ProductService';
+import { fetchCategories, fetchSubcategories } from '../../services/CategoryService';
 import ProductCard from '../../components/ProductCard';
 import SupplierCard from '../../components/SupplierCard';
 import AutoScrollBanner from '../../components/AutoScrollBanner';
 import CategoryTabView from '../../components/CategoryTabView';
 import Section from '../../components/Section';
+import ProductList from '../../components/ProductList'
 
 const CategoryCard = ({ name, image }) => (
   <div className="flex flex-col items-center gap-2 w-24 flex-shrink-0">
@@ -40,6 +41,33 @@ const PopularCategories = ({ categories }) => {
     </Section>
   );
 };
+
+const sampleProducts = [
+  {
+    id: 1,
+    name: "Nike Air Max",
+    price: 120,
+    image: "https://via.placeholder.com/150"
+  },
+  {
+    id: 2,
+    name: "Adidas Ultraboost",
+    price: 150,
+    image: "https://via.placeholder.com/150"
+  },
+  {
+    id: 3,
+    name: "Puma RS-X",
+    price: 100,
+    image: "https://via.placeholder.com/150"
+  },
+  {
+    id: 4,
+    name: "Reebok Classic",
+    price: 80,
+    image: "https://via.placeholder.com/150"
+  },
+];
 
 const MarketplacePage = () => {
   const { categoryId: routeCategoryId, subCategoryId: routeSubCategoryId } = useParams();
@@ -142,10 +170,11 @@ const MarketplacePage = () => {
       <Section name="You Might Need">
         <CategoryTabView onCategorySelected={(id) => setCategoryFilter(id)} />
       </Section>
+      <ProductList title="Trending Shoes" products={sampleProducts} />
 
       {/* Rest of the component remains the same */}
     </div>
   );
 };
 
-export default MarketplacePage;
+export default MarketplacePage
