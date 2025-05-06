@@ -4,14 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "node api.js && vite",
+    "build": "node api.js && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest",
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
     "axios": "^1.8.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
