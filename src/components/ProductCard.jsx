@@ -3,7 +3,7 @@ import { FiShoppingCart, FiImage } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { theme } from '../theme';
 
-const ProductCard = ({ product, variant = 'default', isLoading = false }) => {
+const ProductCard = ({ product, variant = 'default', isLoading = false, fallbackImage = "https://placehold.co/600x400?text=No+Image" }) => {
   const renderSkeleton = () => (
     <div className="bg-white rounded-lg shadow-sm p-4 animate-pulse">
       <div className="relative">
