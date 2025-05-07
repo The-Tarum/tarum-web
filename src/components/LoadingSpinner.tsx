@@ -1,29 +1,44 @@
-
 import React from 'react';
 
 interface LoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg';
-  color?: string;
+  fullScreen?: boolean;
+  message?: string;
 }
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
-  size = 'md',
-  color = 'currentColor'
+  size = 'md', 
+  fullScreen = false,
+  message
 }) => {
-  const sizeMap = {
-    sm: 'w-4 h-4',
-    md: 'w-8 h-8',
-    lg: 'w-12 h-12'
+  const sizeClasses = {
+    sm: 'h-4 w-4 border-2',
+    md: 'h-8 w-8 border-2',
+    lg: 'h-12 w-12 border-3'
   };
 
-  return (
-    <div className="flex justify-center items-center">
-      <div className={`${sizeMap[size]} animate-spin`}>
-        <svg className="w-full h-full" viewBox="0 0 24 24" fill="none">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke={color} strokeWidth="4"/>
-          <path className="opacity-75" fill={color} d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-        </svg>
+  const spinner = (
+    <div className={`
+      animate-spin rounded-full 
+      border-t-blue-500 border-r-transparent
+      border-b-blue-500 border-l-transparent
+      ${sizeClasses[size]}
+    `}/>
+  );
+
+  if (fullScreen) {
+    return (
+      <div className="fixed inset-0 bg-white bg-opacity-90 z-50 flex flex-col items-center justify-center">
+        {spinner}
+        {message && <p className="mt-4 text-gray-600">{message}</p>}
       </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col items-center justify-center p-4">
+      {spinner}
+      {message && <p className="mt-2 text-sm text-gray-600">{message}</p>}
     </div>
   );
 };

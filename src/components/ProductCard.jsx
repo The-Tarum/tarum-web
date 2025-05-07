@@ -38,16 +38,20 @@ const ProductCard = ({ product, variant = 'default', isLoading = false, fallback
     }
 
     return (
-      <img 
-        src={product.image} 
-        alt={product.name}
-        className="w-full h-48 object-cover rounded-lg"
-        onError={(e) => {
-          e.target.onerror = null;
-          e.target.src = '';
-          e.target.parentElement.innerHTML = '<div class="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center"><svg class="w-12 h-12 text-gray-400">...</svg></div>';
-        }}
-      />
+      <div className="relative w-full h-48 bg-gray-50 rounded-lg overflow-hidden">
+        <img 
+          src={product.image} 
+          alt={product.name}
+          loading="lazy"
+          className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-200"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = fallbackImage;
+            e.target.classList.add('opacity-50');
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-200"/>
+      </div>
     );
   };
 
