@@ -1,6 +1,6 @@
-
 import { ApiService } from './ApiService';
 import { QuotationRequest, QuotationResponse } from '../dtos/quotation.dto';
+import { handleError } from './ErrorHandlingService'; // Added import for error handling
 
 export class QuotationService {
   private static instance: QuotationService;
@@ -22,7 +22,7 @@ export class QuotationService {
       const response = await this.api.post('/quotations', request);
       return response.data;
     } catch (error) {
-      throw new Error('Failed to create quotation');
+      return handleError(error); // Use the handleError function
     }
   }
 
@@ -31,7 +31,7 @@ export class QuotationService {
       const response = await this.api.get('/quotations', { params: filters });
       return response.data;
     } catch (error) {
-      throw new Error('Failed to fetch quotations');
+      return handleError(error); // Use the handleError function
     }
   }
 }
