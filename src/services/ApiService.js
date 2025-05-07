@@ -41,20 +41,35 @@ class ApiService {
   };
 
   handleResponseError = async (error) => {
+    if (!error.response) {
+      throw new Error('Network error');
+    }
+
+    const { status, data } = error.response;
     const originalRequest = error.config;
-    if (error.response?.status === 401 && !originalRequest._retry) {
+
+    if (status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        const token = await this.refreshToken();
+        const token = await AuthService.refreshToken();
         originalRequest.headers.Authorization = `Bearer ${token}`;
         return this.api(originalRequest);
       } catch (refreshError) {
-        localStorage.clear();
+        AuthService.logout();
         window.location.href = '/auth/login';
-        return Promise.reject(refreshError);
+        throw refreshError;
       }
     }
-    return Promise.reject(error);
+
+    if (status === 403) {
+      throw new Error('Access denied');
+    }
+
+    if (status === 404) {
+      throw new Error('Resource not found');
+    }
+
+    throw new Error(data.message || 'An error occurred');
   };
 
   async refreshToken() {
