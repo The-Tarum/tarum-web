@@ -69,8 +69,6 @@ const MarketplacePage = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-// https://k6f31f066f.execute-api.us-east-2.amazonaws.com/services/products/api/products?sortBy=createdAt&sortOrder=DESC&page=1&pageSize=10
-// https://k6f31f066f.execute-api.us-east-2.amazonaws.com/services/products/api/products/products?sortBy=createdAt&sortOrder=DESC&page=1&pageSize=10
 
   // Unified data fetching
   useEffect(() => {

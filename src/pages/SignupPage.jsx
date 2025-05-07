@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RegisterDto from '../dtos/register.dto';
-import {register } from '../services/AuthService';
+import {register} from '../services/AuthService';
 
 const SignupPage = () => {
   const [form, setForm] = useState({

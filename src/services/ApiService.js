@@ -1,11 +1,12 @@
 
 import axios from 'axios';
-import { tokens } from '../theme/tokens';
+import AuthService from './AuthService';
+
 
 class ApiService {
-  constructor() {
+  constructor(baseUrl) {
     this.api = axios.create({
-      baseURL: process.env.VITE_API_BASE_URL,
+      baseURL :baseUrl,
       timeout: 15000,
       headers: {
         'Content-Type': 'application/json'
@@ -73,6 +74,7 @@ class ApiService {
   };
 
   async refreshToken() {
+    // eslint-disable-next-line no-useless-catch
     try {
       const refreshToken = localStorage.getItem('refreshToken');
       const response = await this.api.post('/auth/refresh', { refreshToken });

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getValidToken } from './AuthService';
+import {getValidToken} from './AuthService';
 
 
 const BASE_URL = import.meta.env.VITE_PRODUCT_SERVICE;
