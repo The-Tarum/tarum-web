@@ -29,13 +29,12 @@ const CategoryCard = ({ name, image }) => (
 
 const PopularCategories = ({ categories }) => {
   const navigate = useNavigate();
-
   return (
     <Section
       name="Popular Categories"
       onHeaderClick={() => navigate("/marketplace/categories")}
     >
-      <div className="flex gap-6 overflow-x-auto scrollbar-hide pb-2 px-2">
+      <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2 px-2">
         {categories.map((category) => (
           <CategoryCard name={category.name} image={category.image} />
         ))}
@@ -43,7 +42,6 @@ const PopularCategories = ({ categories }) => {
     </Section>
   );
 };
-
 
 const MarketplacePage = () => {
   const { categoryId: routeCategoryId, subCategoryId: routeSubCategoryId } =
@@ -69,8 +67,8 @@ const MarketplacePage = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-// https://k6f31f066f.execute-api.us-east-2.amazonaws.com/services/products/api/products?sortBy=createdAt&sortOrder=DESC&page=1&pageSize=10
-// https://k6f31f066f.execute-api.us-east-2.amazonaws.com/services/products/api/products/products?sortBy=createdAt&sortOrder=DESC&page=1&pageSize=10
+  // https://k6f31f066f.execute-api.us-east-2.amazonaws.com/services/products/api/products?sortBy=createdAt&sortOrder=DESC&page=1&pageSize=10
+  // https://k6f31f066f.execute-api.us-east-2.amazonaws.com/services/products/api/products/products?sortBy=createdAt&sortOrder=DESC&page=1&pageSize=10
 
   // Unified data fetching
   useEffect(() => {
@@ -86,14 +84,13 @@ const MarketplacePage = () => {
             ...(minRating > 0 && { rating: minRating }),
             ...(searchQuery && { search: searchQuery }),
             page,
-            sortBy: 'createdAt',
-            sortOrder: 'DESC'
+            sortBy: "createdAt",
+            sortOrder: "DESC",
           }),
         ]);
 
-        console.log(prods)
-
-        if (cats.success) setCategories(cats.data);
+        console.log(prods);
+        if (cats) setCategories(cats);
         setProducts(prods.products);
         setTotalPages(prods.totalPages);
       } catch (err) {
@@ -104,7 +101,14 @@ const MarketplacePage = () => {
     };
 
     loadData();
-  }, [categoryFilter, subcategoryFilter, priceRange, minRating, searchQuery, page]);
+  }, [
+    categoryFilter,
+    subcategoryFilter,
+    priceRange,
+    minRating,
+    searchQuery,
+    page,
+  ]);
 
   // Subcategory handling
   useEffect(() => {
@@ -136,9 +140,11 @@ const MarketplacePage = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header Section */}
-      <div className="p-4">
-        <h2 className="font-bold mb-6">Business Tools</h2>
+      <Section
+        name={"Business Tools"}
+        showFilterOption={false}
+        onHeaderClick={null}
+      >
         <div className="flex gap-4 flex-row md:flex-row">
           <button
             className="flex items-center justify-between bg-secondary text-white px-6 py-4 rounded-2xl shadow-md hover:bg-secondary transition"
@@ -161,12 +167,12 @@ const MarketplacePage = () => {
             </div>
           </button>
         </div>
-      </div>
+      </Section>
 
       <PopularCategories categories={categories} />
       <AutoScrollBanner />
 
-      <Section 
+      <Section
         name="You Might Need"
         onHeaderClick={() => navigate("/marketplace/products")}
         showFilterOption={true}
@@ -175,29 +181,32 @@ const MarketplacePage = () => {
           const queryParams = {
             ...(categoryFilter && { categoryId: categoryFilter }),
             ...(subcategoryFilter && { subCategoryId: subcategoryFilter }),
-            ...(filters.priceRange[1] !== 500 && { 
+            ...(filters.priceRange[1] !== 500 && {
               minPrice: filters.priceRange[0],
-              maxPrice: filters.priceRange[1]
+              maxPrice: filters.priceRange[1],
             }),
-            ...(filters.selectedFilters?.Region && { region: filters.selectedFilters.Region }),
+            ...(filters.selectedFilters?.Region && {
+              region: filters.selectedFilters.Region,
+            }),
             page: 1, // Reset to first page when filters change
-            sortBy: 'createdAt',
-            sortOrder: 'DESC'
+            sortBy: "createdAt",
+            sortOrder: "DESC",
           };
 
           setPage(1);
-          fetchProducts(queryParams).then(response => {
+          fetchProducts(queryParams).then((response) => {
             setProducts(response.products);
             setTotalPages(response.totalPages);
           });
         }}
       >
         <CategoryTabView onCategorySelected={(id) => setCategoryFilter(id)} />
-        <ProductList title="Trending Shoes" products={products} isLoading={loading} />
+        <ProductList
+          title="Trending Shoes"
+          products={products}
+          isLoading={loading}
+        />
       </Section>
-
-
-
     </div>
   );
 };

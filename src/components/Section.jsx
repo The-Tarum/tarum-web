@@ -1,4 +1,3 @@
-
 import ArrowRight from "../assets/arrow-right.svg";
 import React, { useState } from "react";
 import { ChevronRight, Funnel, X } from "lucide-react";
@@ -23,7 +22,7 @@ const SelectedFilters = ({ selectedFilters, onRemove }) => (
 const Section = ({
   name,
   children,
-  onHeaderClick,
+  onHeaderClick = null ,
   showFilterOption = false,
   onFiltersChange,
 }) => {
@@ -32,15 +31,15 @@ const Section = ({
     selectedFilters: {},
     priceRange: [100, 500],
     qtyRange: [10, 50],
-    volumeRange: [100, 200]
+    volumeRange: [100, 200],
   });
-  
+
   const [displayedFilters, setDisplayedFilters] = useState([]);
 
   const handleApplyFilters = (filters) => {
     setActiveFilters(filters);
     setShowFilters(false);
-    
+
     // Convert filters to displayed format
     const newDisplayedFilters = [];
     Object.entries(filters.selectedFilters).forEach(([key, value]) => {
@@ -48,14 +47,14 @@ const Section = ({
         newDisplayedFilters.push({ label: key, value });
       }
     });
-    
+
     if (filters.priceRange[0] !== 100 || filters.priceRange[1] !== 500) {
       newDisplayedFilters.push({
-        label: 'Price Range',
-        value: `$${filters.priceRange[0]} - $${filters.priceRange[1]}`
+        label: "Price Range",
+        value: `$${filters.priceRange[0]} - $${filters.priceRange[1]}`,
       });
     }
-    
+
     setDisplayedFilters(newDisplayedFilters);
     if (onFiltersChange) {
       onFiltersChange(filters);
@@ -67,7 +66,7 @@ const Section = ({
       selectedFilters: {},
       priceRange: [100, 500],
       qtyRange: [10, 50],
-      volumeRange: [100, 200]
+      volumeRange: [100, 200],
     };
     setActiveFilters(resetState);
     setDisplayedFilters([]);
@@ -78,21 +77,23 @@ const Section = ({
 
   const handleRemoveFilter = (filterLabel) => {
     const updatedFilters = { ...activeFilters };
-    if (filterLabel === 'Price Range') {
+    if (filterLabel === "Price Range") {
       updatedFilters.priceRange = [100, 500];
     } else {
       updatedFilters.selectedFilters[filterLabel] = null;
     }
-    
+
     setActiveFilters(updatedFilters);
-    setDisplayedFilters(displayedFilters.filter(f => f.label !== filterLabel));
+    setDisplayedFilters(
+      displayedFilters.filter((f) => f.label !== filterLabel)
+    );
     if (onFiltersChange) {
       onFiltersChange(updatedFilters);
     }
   };
 
   return (
-    <div className="p-4 bg-white">
+    <div className="p-4 bg-white ">
       {showFilters && (
         <FilterDrawer
           initialFilters={activeFilters}
@@ -101,27 +102,30 @@ const Section = ({
           onClose={() => setShowFilters(false)}
         />
       )}
-      
+
+      <div className="flex items-center justify-between">
+        <div
+          className="flex flex-row  items-center gap-2 cursor-pointer"
+          onClick={onHeaderClick}
+        >
+          <h2 className="text-base font-bold">{name}</h2>
+          {onHeaderClick && (<img src={ArrowRight} alt="Right arrow" className="w-5 h-5" />)}
+        </div>
+        {showFilterOption && (
+          <div className="flex flex-row  items-center gap-2 cursor-pointer p-1 shadow-2xl rounded-3xl bg-gray-50">
+            <button onClick={() => setShowFilters(true)}>
+              <Funnel className="" size={16} />
+            </button>
+          </div>
+        )}
+      </div>
       {displayedFilters.length > 0 && (
         <SelectedFilters
           selectedFilters={displayedFilters}
           onRemove={handleRemoveFilter}
         />
       )}
-      
-      <div className="flex items-center justify-between">
-        <div className="flex flex-row mb-6 items-center gap-2 cursor-pointer" onClick={onHeaderClick}>
-          <h2 className="text-base font-bold">{name}</h2>
-          <img src={ArrowRight} alt="Right arrow" className="w-5 h-5" />
-        </div>
-        <div className="flex flex-row mb-6 items-center gap-2 cursor-pointer">
-          {showFilterOption && (
-            <button onClick={() => setShowFilters(true)}>
-              <Funnel className="" size={16} />
-            </button>
-          )}
-        </div>
-      </div>
+      <div className="pb-2"/>
       {children}
     </div>
   );

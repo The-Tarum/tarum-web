@@ -116,21 +116,21 @@ const FilterDrawer = ({ onClose, onApply, onReset, initialFilters = {} }) => {
         <RangeSlider
           label="Price/kg"
           min={100}
-          max={500}
+          max={10000}
           value={priceRange}
           onChange={setPriceRange}
         />
         <RangeSlider
           label="Quantities (kg)"
-          min={10}
-          max={50}
+          min={100}
+          max={10000}
           value={qtyRange}
           onChange={setQtyRange}
         />
         <RangeSlider
           label="Annual seller product volume (mt)"
           min={100}
-          max={200}
+          max={10000}
           value={volumeRange}
           onChange={setVolumeRange}
         />

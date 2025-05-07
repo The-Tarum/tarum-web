@@ -69,3 +69,23 @@ export const fetchProducts = async (params = {}) => {
     };
   }
 };
+
+
+export const fetchProductDetails = async (id) => {
+
+
+  try {
+    const response = await axiosInstance.get(`/products/${id}`);
+
+    return {
+      success: true,
+      data: response.data
+    };
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return {
+      success: false,
+      error: error.response?.data?.message || 'Failed to fetch products'
+    };
+  }
+};

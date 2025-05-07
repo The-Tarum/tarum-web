@@ -1,11 +1,12 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Capacitor } from '@capacitor/core';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { Capacitor } from "@capacitor/core";
 
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [isMobileApp, setIsMobileApp] = useState(false);
-  const [platform, setPlatform] = useState('web');
+  const [platform, setPlatform] = useState("web");
+  const [title, setTitle] = useState("");
 
   useEffect(() => {
     const plat = Capacitor.getPlatform();
@@ -14,7 +15,7 @@ export const AppProvider = ({ children }) => {
   }, []);
 
   return (
-    <AppContext.Provider value={{ isMobileApp, platform }}>
+    <AppContext.Provider value={{ isMobileApp, platform, title , setTitle }}>
       {children}
     </AppContext.Provider>
   );
