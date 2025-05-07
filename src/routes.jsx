@@ -1,105 +1,66 @@
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
-import HomePage from './pages/marketplace/HomePage';
-import SignupPage from './pages/SignupPage';
 import Layout from './components/Layout';
-import PrivateRoute from './PrivateRoute'
-import CategoryPage from './pages/CategoryPage'
-import ProductPage from './pages/marketplace/ProductPage'
-import ProfilePage  from './pages/ProfilePage'
-import OrdersPage from './pages/OrdersPage';
-import ChatsPage from './pages/ChatsPage';
-import ContectsPage from './pages/ContectsPage';
-import EmailPage from './pages/EmailPage';
-import GroupsPage from './pages/GroupsPage';
-import MarketplacePage from './pages/marketplace/MarketplacePage';
-import SettingsPage from './pages/SettingsPage';
-import  SupplierPage from "./pages/marketplace/SupplierPage";
-import TabView  from './components/TabView';
-import ProductDetailPage from "./pages/marketplace/ProductDetailPage"
-import RequestQuotaPage from './pages/marketplace/RequestQuotaPage';
+import PrivateRoute from './PrivateRoute';
+import LoadingSpinner from './components/LoadingSpinner';
+
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const SignupPage = lazy(() => import('./pages/SignupPage'));
+const HomePage = lazy(() => import('./pages/marketplace/HomePage'));
+const ProductPage = lazy(() => import('./pages/marketplace/ProductPage'));
+const SupplierPage = lazy(() => import('./pages/marketplace/SupplierPage'));
+const ProductDetailPage = lazy(() => import('./pages/marketplace/ProductDetailPage'));
+const RequestQuotaPage = lazy(() => import('./pages/marketplace/RequestQuotaPage'));
+const CategoryPage = lazy(() => import('./pages/CategoryPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const OrdersPage = lazy(() => import('./pages/OrdersPage'));
+const ChatsPage = lazy(() => import('./pages/ChatsPage'));
+const ContectsPage = lazy(() => import('./pages/ContectsPage'));
+const EmailPage = lazy(() => import('./pages/EmailPage'));
+const GroupsPage = lazy(() => import('./pages/GroupsPage'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const TabView = lazy(() => import('./components/TabView'));
 
 
-const routes = createBrowserRouter([
-    {
-      path: '/',
-      element: <LoginPage />, 
-    },
-    {
-      path: '/signup',
-      element: <SignupPage />, 
-    },
-    {
-      path: '/',
-      element: <PrivateRoute />, // check if user is logged in
-      children: [
-        {
-          path: '/',
-          element: <Layout />, // Layout (Header/Footer)
-          children: [
-           
-            {
-              path: 'email',
-              element: <EmailPage />,
-            },
-            {
-              path: 'contents',
-              element: <ContectsPage />,
-            },
+const router = createBrowserRouter([
+  {
+    path: '/auth',
+    children: [
+      { path: 'login', element: <LoginPage /> },
+      { path: 'signup', element: <SignupPage /> }
+    ]
+  },
+  {
+    path: '/',
+    element: <PrivateRoute />,
+    children: [
+      {
+        element: <Layout />,
+        children: [
+          {
+            path: 'marketplace',
+            element: <TabView />,
+            children: [
+              { path: '', element: <HomePage /> },
+              { path: 'products', element: <ProductPage /> },
+              { path: 'supplier', element: <SupplierPage /> },
+              { path: 'product/:id', element: <ProductDetailPage /> },
+              { path: 'categories', element: <CategoryPage /> },
+              { path: 'quota', element: <RequestQuotaPage /> }
+            ]
+          },
+          { path: 'profile', element: <ProfilePage /> },
+          { path: 'orders', element: <OrdersPage /> },
+          { path: 'chats', element: <ChatsPage /> },
+          { path: 'groups', element: <GroupsPage /> },
+          { path: 'settings', element: <SettingsPage /> },
+          { path: 'email', element: <EmailPage /> },
+          { path: 'contents', element: <ContectsPage /> }
 
-            {
-              path: 'marketplace',
-              element: <TabView /> , 
-              children: [
-                {
-                  path: 'home',
-                  element: <HomePage />,
-                },
-                {
-                  path: 'products',
-                  element: <ProductPage/>,
-                },
-                {
-                  path: 'supplier',
-                  element: <SupplierPage />,
-                },
-                {
-                  path: 'categories',
-                  element: <CategoryPage />,
-                },
-                {
-                  path: 'product/:id',
-                  element: <ProductDetailPage />,
-                },
-                {
-                  path: 'supplier',
-                  element: <SupplierPage />,
-                },
-                {
-                  path: 'quota',
-                  element: <RequestQuotaPage/>
-                }
-              ]
-            },
-            {
-              path: 'chats',
-              element: <ChatsPage />,
-            },
-            {
-              path: 'groups',
-              element: <GroupsPage />,
-            },
-            {
-              path: 'settings',
-              element: <SettingsPage />,
-            },
-  
-            
-          ],
-        },
-      ],
-    },
-  ]);
-  
-  export default routes;
+        ]
+      }
+    ]
+  }
+]);
 
+export default router;
