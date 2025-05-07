@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FiFilter, FiX, FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { FaSearch, FaClock } from "react-icons/fa";
 import { fetchProducts } from "../../services/ProductService";
+import ScrollView from "../../components/ScrollView";
 import {
   fetchCategories,
   fetchSubcategories,
@@ -140,73 +141,75 @@ const MarketplacePage = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <Section
-        name={"Business Tools"}
-        showFilterOption={false}
-        onHeaderClick={null}
-      >
-        <div className="flex gap-4 flex-row md:flex-row">
-          <button
-            className="flex items-center justify-between bg-secondary text-white px-6 py-4 rounded-2xl shadow-md hover:bg-secondary transition"
-            onClick={() => navigate("/marketplace/categories")}
-          >
-            <span className="text-xs font-semibold text-left">
-              All Categories
-            </span>
-            <div className="bg-green-600 p-3 rounded-full">
-              <FaSearch />
-            </div>
-          </button>
+      <ScrollView>
+        <Section
+          name={"Business Tools"}
+          showFilterOption={false}
+          onHeaderClick={null}
+        >
+          <div className="flex gap-4 flex-row md:flex-row">
+            <button
+              className="flex items-center justify-between bg-secondary text-white px-6 py-4 rounded-2xl shadow-md hover:bg-secondary transition"
+              onClick={() => navigate("/marketplace/categories")}
+            >
+              <span className="text-xs font-semibold text-left">
+                All Categories
+              </span>
+              <div className="bg-green-600 p-3 rounded-full">
+                <FaSearch />
+              </div>
+            </button>
 
-          <button className="flex items-center justify-between bg-primary-light text-white px-6 py-4 rounded-2xl shadow-md hover:bg-primary-light transition">
-            <span className="text-xs font-semibold text-left">
-              Request for Quotation
-            </span>
-            <div className="bg-primary-light p-3 rounded-full">
-              <FaClock />
-            </div>
-          </button>
-        </div>
-      </Section>
+            <button className="flex items-center justify-between bg-primary-light text-white px-6 py-4 rounded-2xl shadow-md hover:bg-primary-light transition">
+              <span className="text-xs font-semibold text-left">
+                Request for Quotation
+              </span>
+              <div className="bg-primary-light p-3 rounded-full">
+                <FaClock />
+              </div>
+            </button>
+          </div>
+        </Section>
 
-      <PopularCategories categories={categories} />
-      <AutoScrollBanner />
+        <PopularCategories categories={categories} />
+        <AutoScrollBanner />
 
-      <Section
-        name="You Might Need"
-        onHeaderClick={() => navigate("/marketplace/products")}
-        showFilterOption={true}
-        onFiltersChange={(filters) => {
-          // Update query parameters based on filters
-          const queryParams = {
-            ...(categoryFilter && { categoryId: categoryFilter }),
-            ...(subcategoryFilter && { subCategoryId: subcategoryFilter }),
-            ...(filters.priceRange[1] !== 500 && {
-              minPrice: filters.priceRange[0],
-              maxPrice: filters.priceRange[1],
-            }),
-            ...(filters.selectedFilters?.Region && {
-              region: filters.selectedFilters.Region,
-            }),
-            page: 1, // Reset to first page when filters change
-            sortBy: "createdAt",
-            sortOrder: "DESC",
-          };
+        <Section
+          name="You Might Need"
+          onHeaderClick={() => navigate("/marketplace/products")}
+          showFilterOption={true}
+          onFiltersChange={(filters) => {
+            // Update query parameters based on filters
+            const queryParams = {
+              ...(categoryFilter && { categoryId: categoryFilter }),
+              ...(subcategoryFilter && { subCategoryId: subcategoryFilter }),
+              ...(filters.priceRange[1] !== 500 && {
+                minPrice: filters.priceRange[0],
+                maxPrice: filters.priceRange[1],
+              }),
+              ...(filters.selectedFilters?.Region && {
+                region: filters.selectedFilters.Region,
+              }),
+              page: 1, // Reset to first page when filters change
+              sortBy: "createdAt",
+              sortOrder: "DESC",
+            };
 
-          setPage(1);
-          fetchProducts(queryParams).then((response) => {
-            setProducts(response.products);
-            setTotalPages(response.totalPages);
-          });
-        }}
-      >
-        <CategoryTabView onCategorySelected={(id) => setCategoryFilter(id)} />
-        <ProductList
-          title="Trending Shoes"
-          products={products}
-          isLoading={loading}
-        />
-      </Section>
+            setPage(1);
+            fetchProducts(queryParams).then((response) => {
+              setProducts(response.products);
+              setTotalPages(response.totalPages);
+            });
+          }}
+        >
+          <CategoryTabView onCategorySelected={(id) => setCategoryFilter(id)} />
+          <ProductList
+            title="Trending Shoes"
+            products={products}
+            isLoading={loading}
+          />
+        </Section>
+      </ScrollView>
     </div>
   );
 };

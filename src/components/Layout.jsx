@@ -29,22 +29,12 @@ const MobileHeader = () => {
   };
 
   return (
-    <header className="bg-primary-dark text-white sticky top-0 z-10">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center md:px-6 border-b border-primary-dark">
+    <header className="bg-primary-dark text-white sticky top-0 z-10 pt-3">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center  border-b border-primary-dark">
         <div className="font-semibold text-md tracking-wide">
           <Link to="/" className="hover:opacity-90 transition">{title}</Link>
         </div>
-        <nav className="hidden md:flex items-center space-x-6">
-          <Link to="/products" className="hover:text-indigo-300">Products</Link>
-          <Link to="/categories" className="hover:text-indigo-300">Categories</Link>
-          <Link to="/about" className="hover:text-indigo-300">About</Link>
-          <button
-            onClick={handleLogout}
-            className="bg-white text-primary-light px-4 py-1 rounded-full hover:bg-gray-100 transition"
-          >
-            Logout
-          </button>
-        </nav>
+   
       </div>
     </header>
   );
@@ -143,7 +133,7 @@ const Layout = () => {
   console.log(isMobileApp)
 
   return (
-    <div className="flex flex-col min-h-screen pb-20 md:pb-0 bg-gray-50 overflow-x-auto scrollbar-hide">
+    <div className="flex flex-col min-h-screen pb-20 md:pb-0 bg-gray-50 ">
       {isMobileApp ? <MobileHeader /> : <Header />}
       <main className="flex-grow">
         <Outlet />

@@ -5,9 +5,9 @@ import { useAppContext } from "../context/AppContext";
 
 const TabView = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-50 ">
       <Tabs />
-      <main className="flex-grow">
+      <main className="flex-grow  ">
         <Outlet />
       </main>
     </div>
@@ -47,10 +47,10 @@ const Tabs = () => {
   };
 
   return (
-    <div className="bg-primary-dark shadow-sm py-3">
+    <header className="bg-primary-dark shadow-sm  sticky top-14 z-10 pb-2 ">
       <div className="container mx-auto flex flex-col gap-4">
         {/* Tabs */}
-        <div className="flex gap-2 overflow-auto px-1 scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto px-1 scrollbar-hide">
           {tabs.map(({ label, path }) => (
             <button
               key={label}
@@ -84,7 +84,7 @@ const Tabs = () => {
           </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

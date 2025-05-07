@@ -11,7 +11,7 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const plat = Capacitor.getPlatform();
     setPlatform(plat);
-    setIsMobileApp(Capacitor.isNativePlatform());
+    setIsMobileApp(true);
   }, []);
 
   return (
