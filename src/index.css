@@ -1,37 +1,49 @@
 @import "tailwindcss";
 
-
 @theme {
-    --color-primary-dark: #00447C;
-    --color-primary-light: #1F73F7;
-    --color-secondary: #00AD6F;
-    --color-tag:#6CB33F;
-    --color-pill-selected:#F8D45D;
+  --color-primary-dark: #00447c;
+  --color-primary-light: #1f73f7;
+  --color-secondary: #00ad6f;
+  --color-tag: #6cb33f;
+  --color-pill-selected: #f8d45d;
 }
 
 .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
   }
-  
-  .animate-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  50% {
+    opacity: 0.5;
   }
+}
 
-  @keyframes slideDown {
-    from { height: 0 }
-    to { height: var(--radix-collapsible-content-height) }
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes slideDown {
+  from {
+    height: 0;
   }
-  
-  @keyframes slideUp {
-    from { height: var(--radix-collapsible-content-height) }
-    to { height: 0 }
+  to {
+    height: var(--radix-collapsible-content-height);
   }
+}
+
+@keyframes slideUp {
+  from {
+    height: var(--radix-collapsible-content-height);
+  }
+  to {
+    height: 0;
+  }
+}

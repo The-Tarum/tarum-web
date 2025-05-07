@@ -90,7 +90,7 @@ const MarketplacePage = () => {
             sortOrder: 'DESC'
           }),
         ]);
-        
+
         console.log(prods)
 
         if (cats.success) setCategories(cats.data);
@@ -166,14 +166,36 @@ const MarketplacePage = () => {
       <PopularCategories categories={categories} />
       <AutoScrollBanner />
 
-      <Section name="You Might Need"
-            onHeaderClick={() => navigate("/marketplace/products")}
-            showFilterOption={true}
+      <Section 
+        name="You Might Need"
+        onHeaderClick={() => navigate("/marketplace/products")}
+        showFilterOption={true}
+        onFiltersChange={(filters) => {
+          // Update query parameters based on filters
+          const queryParams = {
+            ...(categoryFilter && { categoryId: categoryFilter }),
+            ...(subcategoryFilter && { subCategoryId: subcategoryFilter }),
+            ...(filters.priceRange[1] !== 500 && { 
+              minPrice: filters.priceRange[0],
+              maxPrice: filters.priceRange[1]
+            }),
+            ...(filters.selectedFilters?.Region && { region: filters.selectedFilters.Region }),
+            page: 1, // Reset to first page when filters change
+            sortBy: 'createdAt',
+            sortOrder: 'DESC'
+          };
+
+          setPage(1);
+          fetchProducts(queryParams).then(response => {
+            setProducts(response.products);
+            setTotalPages(response.totalPages);
+          });
+        }}
       >
         <CategoryTabView onCategorySelected={(id) => setCategoryFilter(id)} />
-        <ProductList title="Trending Shoes" products={products} />
+        <ProductList title="Trending Shoes" products={products} isLoading={loading} />
       </Section>
-     
+
 
 
     </div>
@@ -181,4 +203,3 @@ const MarketplacePage = () => {
 };
 
 export default MarketplacePage;
-

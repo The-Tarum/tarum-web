@@ -138,7 +138,7 @@ const Footer = () => {
 
 const Layout = () => {
   return (
-    <div className="flex flex-col min-h-screen pb-20 md:pb-0 bg-gray-50">
+    <div className="flex flex-col min-h-screen pb-20 md:pb-0 bg-gray-50 scrollbar-hide ">
       <Header />
       <main className="flex-grow">
         <Outlet />
