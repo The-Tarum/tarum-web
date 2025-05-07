@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { getValidToken } from './AuthService';
+
 
 const BASE_URL = import.meta.env.VITE_PRODUCT_SERVICE;
 
@@ -11,8 +13,9 @@ const axiosInstance = axios.create({
 });
 
 // Add request interceptor to inject token dynamically
-axiosInstance.interceptors.request.use(config => {
-  const token = localStorage.getItem('token');
+axiosInstance.interceptors.request.use( async config => {
+  const token = await getValidToken();
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

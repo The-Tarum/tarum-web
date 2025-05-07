@@ -1,80 +1,210 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { QuotationService } from '../../services/QuotationService';
+import ActionBar  from '../../components/ActionBar';
+import { FiPlus, FiX } from 'react-icons/fi';
 
-function RequestQuotaPage() {
-  const [formData, setFormData] = useState({
-    productName: '',
-    quantity: '',
-    requirements: '',
-    contactInfo: ''
+const RequestQuotaPage = () => {
+  const [activeTab, setActiveTab] = useState('list');
+  const [quotations, setQuotations] = useState([]);
+  const [newQuotation, setNewQuotation] = useState({
+    products: [{
+      productName: '',
+      quantity: '',
+      unit: 'Kilogram',
+      manufacturer: '',
+      requirements: ''
+    }],
+    deliveryLocation: '',
+    deliverySource: '',
+    payment: 'CDC'
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
+  useEffect(() => {
+    loadQuotations();
+  }, []);
+
+  const loadQuotations = async () => {
+    const response = await QuotationService.getQuotations();
+    setQuotations(response.data);
   };
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const addProduct = () => {
+    setNewQuotation(prev => ({
+      ...prev,
+      products: [...prev.products, {
+        productName: '',
+        quantity: '',
+        unit: 'Kilogram',
+        manufacturer: '',
+        requirements: ''
+      }]
+    }));
+  };
+
+  const removeProduct = (index) => {
+    setNewQuotation(prev => ({
+      ...prev,
+      products: prev.products.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await QuotationService.submitQuotation(newQuotation);
+      setActiveTab('list');
+      loadQuotations();
+    } catch (error) {
+      console.error('Failed to submit quotation:', error);
+    }
+  };
+
+  const handleProductChange = (index, field, value) => {
+    setNewQuotation(prev => ({
+      ...prev,
+      products: prev.products.map((product, i) => 
+        i === index ? { ...product, [field]: value } : product
+      )
+    }));
   };
 
   return (
-    <div className="p-4 max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Request Quota</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Product Name</label>
-          <input
-            type="text"
-            name="productName"
-            value={formData.productName}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Quantity</label>
-          <input
-            type="number"
-            name="quantity"
-            value={formData.quantity}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Requirements</label>
-          <textarea
-            name="requirements"
-            value={formData.requirements}
-            onChange={handleChange}
-            rows={4}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Contact Information</label>
-          <input
-            type="text"
-            name="contactInfo"
-            value={formData.contactInfo}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-          />
-        </div>
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      <ActionBar name="Request Quotation" />
+      
+      <div className="flex space-x-4 p-4">
         <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className={`px-4 py-2 rounded ${activeTab === 'list' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+          onClick={() => setActiveTab('list')}
         >
-          Submit Request
+          Quotations
         </button>
-      </form>
+        <button
+          className={`px-4 py-2 rounded ${activeTab === 'new' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+          onClick={() => setActiveTab('new')}
+        >
+          New Request
+        </button>
+      </div>
+
+      {activeTab === 'list' ? (
+        <div className="p-4">
+          <div className="grid gap-4">
+            {quotations.map((quotation) => (
+              <div key={quotation.id} className="bg-white p-4 rounded-lg shadow">
+                <div className="flex items-center space-x-4">
+                  <img src={quotation.image} alt="" className="w-16 h-16 object-cover rounded" />
+                  <div>
+                    <h3 className="font-semibold">{quotation.productName}</h3>
+                    <p className="text-sm text-gray-600">{quotation.quotesReceived} quotes received</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="p-4">
+          <form className="space-y-6">
+            {newQuotation.products.map((product, index) => (
+              <div key={index} className="bg-white p-4 rounded-lg shadow">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="font-semibold">Product {index + 1}</h3>
+                  {index > 0 && (
+                    <button type="button" onClick={() => removeProduct(index)}>
+                      <FiX className="text-red-500" />
+                    </button>
+                  )}
+                </div>
+                
+                <div className="space-y-4">
+                  <input
+                    type="text"
+                    placeholder="Product name"
+                    className="w-full p-2 border rounded"
+                    value={product.productName}
+                    onChange={(e) => handleProductChange(index, 'productName', e.target.value)}
+                  />
+                  
+                  <div className="flex space-x-2">
+                    <input
+                      type="number"
+                      placeholder="Quantity"
+                      className="w-1/2 p-2 border rounded"
+                      value={product.quantity}
+                      onChange={(e) => handleProductChange(index, 'quantity', e.target.value)}
+                    />
+                    <select
+                      className="w-1/2 p-2 border rounded"
+                      value={product.unit}
+                      onChange={(e) => handleProductChange(index, 'unit', e.target.value)}
+                    >
+                      <option value="Kilogram">Kilogram</option>
+                      <option value="Liter">Liter</option>
+                      <option value="Piece">Piece</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            ))}
+            
+            <button
+              type="button"
+              onClick={addProduct}
+              className="w-full p-4 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-blue-500 hover:text-blue-500"
+            >
+              <FiPlus className="mx-auto" />
+              Add More
+            </button>
+
+            <div className="bg-white p-4 rounded-lg shadow space-y-4">
+              <input
+                type="text"
+                placeholder="Delivery location"
+                className="w-full p-2 border rounded"
+                value={newQuotation.deliveryLocation}
+                onChange={(e) => setNewQuotation(prev => ({ ...prev, deliveryLocation: e.target.value }))}
+              />
+              
+              <input
+                type="text"
+                placeholder="Delivery source"
+                className="w-full p-2 border rounded"
+                value={newQuotation.deliverySource}
+                onChange={(e) => setNewQuotation(prev => ({ ...prev, deliverySource: e.target.value }))}
+              />
+              
+              <select
+                className="w-full p-2 border rounded"
+                value={newQuotation.payment}
+                onChange={(e) => setNewQuotation(prev => ({ ...prev, payment: e.target.value }))}
+              >
+                <option value="CDC">CDC</option>
+                <option value="LC">LC</option>
+                <option value="TT">TT</option>
+              </select>
+            </div>
+
+            <div className="flex space-x-4">
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="w-1/2 bg-blue-600 text-white py-2 rounded"
+              >
+                Submit to All
+              </button>
+              <button
+                type="button"
+                className="w-1/2 bg-green-600 text-white py-2 rounded"
+              >
+                Submit to Select
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default RequestQuotaPage;

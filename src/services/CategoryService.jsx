@@ -1,25 +1,43 @@
+import axios from 'axios';
+import { getValidToken } from './AuthService';
+
 const BASE_URL = import.meta.env.VITE_CATEGORY_SERVICE;
 
-const getAuthHeaders = () => {
-  const token = localStorage.getItem('token');
-  return {
-    Authorization: `Bearer ${token}`,
+const axiosInstance = axios.create({
+  baseURL: BASE_URL,
+  headers: {
     'Content-Type': 'application/json',
-  };
-};
+  },
+});
+
+// Request interceptor to inject token
+axiosInstance.interceptors.request.use(async config => {
+  const token = await getValidToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Response interceptor for error handling
+axiosInstance.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      console.error('Authentication error - redirect to login');
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const fetchCategories = async () => {
-  const res = await fetch(`${BASE_URL}/categories`, {
-    headers: getAuthHeaders(),
-  });
-  if (!res.ok) throw new Error('Failed to fetch categories');
-  return await res.json();
+  const res = await axiosInstance.get('/categories');
+  return res.data;
 };
 
 export const fetchSubcategories = async (categoryId) => {
-  const res = await fetch(`${BASE_URL}/subcategories?categoryId=${categoryId}`, {
-    headers: getAuthHeaders(),
+  const res = await axiosInstance.get(`/subcategories`, {
+    params: { categoryId },
   });
-  if (!res.ok) throw new Error('Failed to fetch subcategories');
-  return await res.json();
+  return res.data;
 };
