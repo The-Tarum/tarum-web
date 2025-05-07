@@ -4,6 +4,7 @@ import React from 'react';
 import ProductCard from './ProductCard';
 
 const ProductList = ({ products, variant = 'chemical', gridCols = 1 }) => {
+  console.log(products)
   const gridClassName = {
     1: 'grid-cols-2',
     2: 'grid-cols-1 md:grid-cols-2',

@@ -42,13 +42,13 @@ const ProductCard = ({ product, variant = 'default' }) => {
 
   if (variant === 'simple') {
     return (
-      <div className="bg-white rounded-lg p-4">
+      <div className="bg-white rounded-lg p-2">
         <img 
           src={product.image} 
           alt={product.name} 
-          className="w-full h-40 object-cover rounded-lg mb-3"
+          className="w-full h-fit object-cover rounded-lg mb-3 bg-gray-100"
         />
-        <h3 className="font-medium text-gray-900">{product.name}</h3>
+        <p className=" text-gray-900">{product.name}</p>
         <p className="text-lg font-bold mt-1">${product.price}</p>
       </div>
     );

@@ -44,32 +44,6 @@ const PopularCategories = ({ categories }) => {
   );
 };
 
-const sampleProducts = [
-  {
-    id: 1,
-    name: "Nike Air Max",
-    price: 120,
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: 2,
-    name: "Adidas Ultraboost",
-    price: 150,
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: 3,
-    name: "Puma RS-X",
-    price: 100,
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: 4,
-    name: "Reebok Classic",
-    price: 80,
-    image: "https://via.placeholder.com/150",
-  },
-];
 
 const MarketplacePage = () => {
   const { categoryId: routeCategoryId, subCategoryId: routeSubCategoryId } =
@@ -90,31 +64,47 @@ const MarketplacePage = () => {
   const [availableSubcategories, setAvailableSubcategories] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  // Data fetching
+// https://k6f31f066f.execute-api.us-east-2.amazonaws.com/services/products/api/products?sortBy=createdAt&sortOrder=DESC&page=1&pageSize=10
+// https://k6f31f066f.execute-api.us-east-2.amazonaws.com/services/products/api/products/products?sortBy=createdAt&sortOrder=DESC&page=1&pageSize=10
+
+  // Unified data fetching
   useEffect(() => {
     const loadData = async () => {
+      setLoading(true);
       try {
         const [cats, prods] = await Promise.all([
           fetchCategories(),
           fetchProducts({
-            categoryId: categoryFilter,
-            subCategoryId: subcategoryFilter,
-            price: priceRange[1],
-            rating: minRating,
-            search: searchQuery,
+            ...(categoryFilter && { categoryId: categoryFilter }),
+            ...(subcategoryFilter && { subCategoryId: subcategoryFilter }),
+            ...(priceRange[1] !== 10000 && { price: priceRange[1] }),
+            ...(minRating > 0 && { rating: minRating }),
+            ...(searchQuery && { search: searchQuery }),
+            page,
+            sortBy: 'createdAt',
+            sortOrder: 'DESC'
           }),
         ]);
+        
+        console.log(prods)
 
         if (cats.success) setCategories(cats.data);
-        setProducts(prods);
-      } catch (error) {
-        console.error("Error loading data:", error);
+        setProducts(prods.products);
+        setTotalPages(prods.totalPages);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
     };
 
     loadData();
-  }, [categoryFilter, subcategoryFilter, priceRange, minRating, searchQuery]);
+  }, [categoryFilter, subcategoryFilter, priceRange, minRating, searchQuery, page]);
 
   // Subcategory handling
   useEffect(() => {
@@ -181,7 +171,7 @@ const MarketplacePage = () => {
             showFilterOption={true}
       >
         <CategoryTabView onCategorySelected={(id) => setCategoryFilter(id)} />
-        <ProductList title="Trending Shoes" products={sampleProducts} />
+        <ProductList title="Trending Shoes" products={products} />
       </Section>
      
 
@@ -191,3 +181,4 @@ const MarketplacePage = () => {
 };
 
 export default MarketplacePage;
+
