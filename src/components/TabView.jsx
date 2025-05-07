@@ -5,7 +5,7 @@ import { FiSearch, FiFilter, FiX, FiChevronDown, FiChevronUp } from 'react-icons
 
 const TabView = () => {
   return (
-    <div className="flex flex-col min-h-screen md:pb-0 bg-gray-50">
+    <div className="flex flex-col min-h-screen md:pb-0 bg-gray-50 sticky">
       <Tabs />
       <main className="flex-grow">
         <Outlet />
@@ -16,7 +16,7 @@ const TabView = () => {
 };
 
 const Tabs= () => {
-  const [activeTab, setActiveTab] = useState('Product');
+  const [activeTab, setActiveTab] = useState('Home');
   const navigate = useNavigate();
   const switchtab = (label , path) =>{
     navigate(path)
@@ -25,8 +25,10 @@ const Tabs= () => {
   }
   
   const tabs = [
+    {label :"Home", path:"home"},
     {label :"Product", path:"products"},
-    {label: "Supplier" , path:"supplier"}
+    {label: "Supplier" , path:"supplier"},
+    {label: "Rquest Quota" , path:"quota"}
 ];
   
 
@@ -34,15 +36,15 @@ const Tabs= () => {
   
   return (
  
-<div className="bg-primary-dark shadow-sm py-3">
+<div className="bg-primary-dark shadow-sm py-3 ">
   <div className="container mx-auto px-4 flex  flex-col  justify-between gap-4">
     
     {/* Tabs */}
-    <div className="flex gap-4">
+    <div className="flex gap-4 overflow-auto">
       {tabs.map(({ label, path }) => (
         <button
           key={label}
-          className={`px-4 py-1.5 rounded-md text-xs font-semibold transition
+          className={`px-4 py-1.5 rounded-md text-xs  font-semibold transition
             ${activeTab === label
               ? 'bg-yellow-400 text-primary-dark'
               : 'bg-transparent border border-[#D2D6DB26] text-[#D2D6DB]'}`}

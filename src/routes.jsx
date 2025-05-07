@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
-import HomePage from './pages/HomePage';
+import HomePage from './pages/marketplace/HomePage';
 import SignupPage from './pages/SignupPage';
 import Layout from './components/Layout';
 import PrivateRoute from './PrivateRoute'
@@ -16,6 +16,8 @@ import MarketplacePage from './pages/marketplace/MarketplacePage';
 import SettingsPage from './pages/SettingsPage';
 import  SupplierPage from "./pages/marketplace/SupplierPage";
 import TabView  from './components/TabView';
+import ProductDetailPage from "./pages/marketplace/ProductDetailPage"
+import RequestQuotaPage from './pages/marketplace/RequestQuotaPage';
 
 
 const routes = createBrowserRouter([
@@ -65,6 +67,18 @@ const routes = createBrowserRouter([
                   path: 'categories',
                   element: <CategoryPage />,
                 },
+                {
+                  path: 'product/:id',
+                  element: <ProductDetailPage />,
+                },
+                {
+                  path: 'supplier',
+                  element: <SupplierPage />,
+                },
+                {
+                  path: 'quota',
+                  element: <RequestQuotaPage/>
+                }
               ]
             },
             {

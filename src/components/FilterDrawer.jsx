@@ -29,7 +29,7 @@ const FilterDrawer = ({ onClose, onApply, onReset }) => {
   });
 
   return (
-    <div className="fixed bottom-0 inset-x-0 bg-white rounded-t-2xl shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-500 max-h-[90vh] overflow-y-auto">
+    <div className="fixed bottom-0 inset-x-0 bg-white rounded-t-2xl shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-500 max-h-[90vh] overflow-y-auto pb-[50px]">
       {/* Header */}
       <div className="flex justify-between items-center p-4 border-b border-gray-400">
         <h2 className="text-lg font-semibold">Filters</h2>

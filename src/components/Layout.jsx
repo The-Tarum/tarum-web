@@ -69,10 +69,18 @@ const Header = () => {
 const MobileBottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => {
+    // Special case for marketplace routes
+    if (path.startsWith('/marketplace')) {
+      return location.pathname.startsWith('/marketplace');
+    }
+    // Exact match for other routes
+    return location.pathname === path;
+  };
+  
 
   const navItems = [
-    { path: '/home',       label: 'Email',       icon: MailIcon ,iconFill:MailIconFill},
+    { path: '/email',       label: 'Email',       icon: MailIcon ,iconFill:MailIconFill},
     { path: '/products',   label: 'Contacts',    icon: BookOpenIcon ,iconFill:BookOpenIconFill},
     { path: '/marketplace/home',label: 'Marketplace', icon: StorefrontIcon ,iconFill:StorefrontIconFill},
     { path: '/chats',      label: 'Chats',       icon: Message ,iconFill:MessageFill},
