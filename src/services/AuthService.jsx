@@ -1,8 +1,7 @@
 
 import firebaseService from './FirebaseService';
-import axios from 'axios';
+import { getProfile} from "./UserService.jsx";
 
-const BASE_URL = import.meta.env.VITE_USER_SERVICE;
 
 // Check if token needs refresh
 const isTokenExpired = (token) => {
@@ -51,6 +50,7 @@ export const login = async (loginDto) => {
     const response = await firebaseService.post('/accounts:signInWithPassword', loginDto);
     localStorage.setItem('token', response.data.idToken);
     localStorage.setItem('refreshToken', response.data.refreshToken);
+    await getProfile()
     return response.data;
   } catch (error) {
     console.error('Login failed:', error.response?.data || error.message);
@@ -58,7 +58,3 @@ export const login = async (loginDto) => {
   }
 };
 
-export const register = async (registerDto) => {
-  const response = await axios.post(`${BASE_URL}/register`, registerDto);
-  return response.data;
-};

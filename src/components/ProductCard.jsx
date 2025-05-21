@@ -3,6 +3,8 @@ import { FiShoppingCart, FiImage } from "react-icons/fi";
 import ProductRegionIcon from "../assets/product-region.svg";
 import TrustedCompanyIcon from "../assets/trusted-company.svg";
 import { useNavigate } from "react-router";
+import {Card } from "@/components/ui/card.jsx";
+
 
 const ProductCard = ({ product, variant = "default", isLoading = false }) => {
 
@@ -36,7 +38,7 @@ const ProductCard = ({ product, variant = "default", isLoading = false }) => {
 
   if (variant === "chemical") {
     return (
-      <div className="bg-white rounded-lg shadow-xs hover:shadow-md transition-shadow p-1" onClick={() => onClick(product.id)} >
+      <Card className="bg-white rounded-lg shadow-xs hover:shadow-md transition-shadow p-1" onClick={() => onClick(product.id)} >
         <div className="relative">
 
           {product.ProductImages ? (
@@ -86,7 +88,7 @@ const ProductCard = ({ product, variant = "default", isLoading = false }) => {
             </div>
           </div>
         </div>
-      </div>
+      </Card>
     );
   }
 
@@ -94,7 +96,7 @@ const ProductCard = ({ product, variant = "default", isLoading = false }) => {
 
   if (variant === "simple") {
     return (
-      <div className="bg-white rounded-lg p-2">
+      <Card className="bg-white rounded-lg ">
         {product.image ? (
           <img
             src={product.image}
@@ -112,12 +114,12 @@ const ProductCard = ({ product, variant = "default", isLoading = false }) => {
         )}
         <p className="text-gray-900">{product.name}</p>
         <p className="text-lg font-bold mt-1">${product.price}</p>
-      </div>
+      </Card>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4">
+    <Card className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow ">
       <div className="flex items-start space-x-4">
         {product.image ? (
           <img
@@ -152,7 +154,7 @@ const ProductCard = ({ product, variant = "default", isLoading = false }) => {
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

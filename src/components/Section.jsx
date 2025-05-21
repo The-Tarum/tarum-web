@@ -94,14 +94,13 @@ const Section = ({
 
   return (
     <div className="p-4 bg-white ">
-      {showFilters && (
-        <FilterDrawer
-          initialFilters={activeFilters}
-          onApply={handleApplyFilters}
-          onReset={handleResetFilters}
-          onClose={() => setShowFilters(false)}
-        />
-      )}
+      <FilterDrawer
+        open={showFilters}
+        onOpenChange={setShowFilters}
+        initialFilters={activeFilters}
+        onApply={handleApplyFilters}
+        onReset={handleResetFilters}
+      />
 
       <div className="flex items-center justify-between">
         <div
@@ -132,3 +131,4 @@ const Section = ({
 };
 
 export default Section;
+

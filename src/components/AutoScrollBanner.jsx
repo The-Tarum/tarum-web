@@ -1,46 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import SaleImage from "../assets/sale.jpg";
+// src/components/AutoScrollBanner.jsx
+"use client"
 
-const AutoScrollBanner = () => {
-  const totalSlides = 5;
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const slideDuration = 3000; // 3 seconds per slide
+import React from "react"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel"
+import Autoplay from "embla-carousel-autoplay"
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide(prev => (prev + 1) % totalSlides);
-    }, slideDuration);
+const slideImage = [
+  "https://tarumimagebucket.s3.us-east-1.amazonaws.com/banner-images/a.png",
+  "https://tarumimagebucket.s3.us-east-1.amazonaws.com/banner-images/b.jpg",
+  "https://tarumimagebucket.s3.us-east-1.amazonaws.com/banner-images/c.jpg",
+]
 
-    return () => clearInterval(interval);
-  }, []);
-
+export default function AutoScrollBanner() {
   return (
-    <div className="w-full overflow-hidden relative group">
-      <div 
-        className="flex transition-transform duration-500 ease-in-out"
-        style={{ 
-          width: `${totalSlides * 100}%`,
-          transform: `translateX(-${currentSlide * (100 / totalSlides)}%)`
-        }}
-      >
-        {[...Array(totalSlides)].map((_, i) => (
-          <div 
+    <Carousel
+      plugins={[Autoplay({ delay: 2000, stopOnInteraction: true })]}
+      className="w-full overflow-hidden relative group rounded-xl"
+      opts={{ loop: true }}
+    >
+      <CarouselContent>
+        {slideImage.map((src, i) => (
+          <CarouselItem
             key={i}
             className="flex-shrink-0"
-            style={{ width: `${100 / totalSlides}%` }}
+            style={{ width: `${100 / slideImage.length}%` }}
           >
-            <div className="h-[150px] mx-3 flex items-center justify-center">
-              <img 
-                src={SaleImage} 
-                className="w-full h-full object-cover rounded-xl"
-                alt={`Sale ${i + 1}`}
+            <div className="h-[150px] mx-3 flex items-center justify-center rounded-xl overflow-hidden">
+              <img
+                src={src}
+                alt={`Slide ${i + 1}`}
+                className="w-full h-full object-cover"
               />
             </div>
-          </div>
+          </CarouselItem>
         ))}
-      </div>
-    </div>
-  );
-};
-
-export default AutoScrollBanner;
+      </CarouselContent>
+    </Carousel>
+  )
+}

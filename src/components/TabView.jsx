@@ -47,7 +47,7 @@ const Tabs = () => {
   };
 
   return (
-    <header className="bg-primary-dark shadow-sm  sticky top-14 z-10 pb-2 ">
+    <header className="bg-primary-dark shadow-sm  sticky top-12 z-10 pb-2 ">
       <div className="container mx-auto flex flex-col gap-4">
         {/* Tabs */}
         <div className="flex gap-2 overflow-x-auto px-1 scrollbar-hide">

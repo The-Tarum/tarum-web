@@ -8,14 +8,13 @@ import StorefrontIcon from '../assets/storefront.svg';
 import UsersIcon from '../assets/users.svg';
 import SettingsIcon from '../assets/settings.svg';
 import Message from '../assets/message.svg';
-
 import MailIconFill from '../assets/mail-filled.svg';
 import BookOpenIconFill from '../assets/book-open-filled.svg';
 import StorefrontIconFill from '../assets/storefront-filled.svg';
 import UsersIconFill from '../assets/users-filled.svg';
 import SettingsIconFill from '../assets/settings-filled.svg';
 import MessageFill from '../assets/message-filled.svg';
-
+import WebTabView from "@/components/WebTabView.jsx";
 import { useAppContext } from '../context/AppContext';
 
 // Mobile header
@@ -83,7 +82,7 @@ const MobileBottomNav = () => {
 
   const navItems = [
     { path: '/email', label: 'Email', icon: MailIcon, iconFill: MailIconFill },
-    { path: '/products', label: 'Contacts', icon: BookOpenIcon, iconFill: BookOpenIconFill },
+    { path: '/contects', label: 'Contacts', icon: BookOpenIcon, iconFill: BookOpenIconFill },
     { path: '/marketplace/home', label: 'Marketplace', icon: StorefrontIcon, iconFill: StorefrontIconFill },
     { path: '/chats', label: 'Chats', icon: Message, iconFill: MessageFill },
     { path: '/groups', label: 'Groups', icon: UsersIcon, iconFill: UsersIconFill },
@@ -130,7 +129,6 @@ const Footer = () => (
 // Main layout component
 const Layout = () => {
   const { isMobileApp } = useAppContext();
-  console.log(isMobileApp)
 
   return (
     <div className="flex flex-col min-h-screen pb-20 md:pb-0 bg-gray-50 ">
